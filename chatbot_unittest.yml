@@ -18,10 +18,15 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Build Docker Image
-      run: npm build ...
+      run: docker build ./ -f src/chatbot/inference/docker/Dockerfile -t chatbotinfer:latest
 
-    - name: Run Test
-      run: npm run test ...
+    - name: Start Docker Container
+      run: docker run -tid -v .:/root/chatbot --name="chatbotinfer" --hostname="chatbotinfer-container" chatbotinfer:latest
+
+    - name: Run Inference Test
+      run: docker exec "chatbotinfer" bash -c |
+      " python src/chatbot/inference/generate.py --base_model_path "google/flan-t5-xl" |
+      --instructions "Transform the following sentence into one that shows contrast. The tree is rotten."
 
     - name: Test Summary
       run: codecov 

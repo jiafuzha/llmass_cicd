@@ -1,0 +1,27 @@
+name: Unit Test in Chatbot
+
+on:
+  pull_request:
+    branches:
+    - main
+    paths:
+    - '.github/workflows/chatbot_unittest.yml'
+    - 'src/chatbot/**'
+    - 'conf/**'
+
+jobs:
+  unit_tests:
+    name: Unit Test
+    runs-on: self-hosted
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Build Docker Image
+      run: npm build ...
+
+    - name: Run Test
+      run: npm run test ...
+
+    - name: Test Summary
+      run: codecov 
